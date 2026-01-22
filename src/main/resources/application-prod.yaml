@@ -1,0 +1,58 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3309/mes?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: tianxiaxian0321
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      use-global-data-source-stat: true
+
+      # [修改] 开发阶段建议关闭“强杀连接”，避免Debug时超时断连
+      remove-abandoned: false
+      remove-abandoned-timeout: 1800
+      log-abandoned: true
+
+      filters: stat,wall,slf4j
+      filter:
+        stat:
+          enabled: true
+          db-type: mysql
+          merge-sql: true
+          log-slow-sql: true
+          slow-sql-millis: 500 # 500ms以上算慢SQL
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin
+        reset-enable: true
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  # [修改] 修正包路径，指向你的新项目
+  typeAliasesPackage: com.yourname.fire.**.entity
+  configuration:
+    cache-enabled: false
+    local-cache-scope: statement
+    # [危险] 除非你有 fastjson 依赖，否则建议注释掉下面这行
+    # default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler
+
+    # [修改] 开启控制台打印 SQL，方便开发调试
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

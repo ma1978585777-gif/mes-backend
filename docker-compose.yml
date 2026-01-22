@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  fire-backend:
+    image: mes-backend
+    container_name: mes-backend
+    restart: always
+    network_mode: host
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /data/logs/mes:/export/logs/rcs/mes-backend
+      - /data/mes/jar/mes-backend.jar:/apps/mes/mes-backend.jar

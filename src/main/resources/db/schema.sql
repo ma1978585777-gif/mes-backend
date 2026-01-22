@@ -1,0 +1,90 @@
+-- 职能表
+CREATE TABLE IF NOT EXISTS mes_function (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    code VARCHAR(50) NOT NULL COMMENT '职能编码',
+    name VARCHAR(100) NOT NULL COMMENT '职能名称',
+    description VARCHAR(255) COMMENT '描述',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_code (code)
+) COMMENT='职能管理';
+
+-- 用户表
+CREATE TABLE IF NOT EXISTS mes_user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    emp_id VARCHAR(50) NOT NULL COMMENT '工号',
+    name VARCHAR(100) NOT NULL COMMENT '姓名',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_emp_id (emp_id)
+) COMMENT='用户管理';
+
+-- 用户职能关联表
+CREATE TABLE IF NOT EXISTS mes_user_function (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    function_id BIGINT NOT NULL COMMENT '职能ID',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    UNIQUE KEY uk_user_function (user_id, function_id)
+) COMMENT='用户职能关联';
+
+-- 物料类型表
+CREATE TABLE IF NOT EXISTS mes_material_type (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    code VARCHAR(50) NOT NULL COMMENT '类型编码',
+    name VARCHAR(100) NOT NULL COMMENT '类型名称',
+    description VARCHAR(255) COMMENT '描述',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_code (code)
+) COMMENT='物料类型';
+
+-- 物料表
+CREATE TABLE IF NOT EXISTS mes_material (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    code VARCHAR(50) NOT NULL COMMENT '物料编码',
+    name VARCHAR(100) NOT NULL COMMENT '物料名称',
+    type_id BIGINT COMMENT '物料类型ID',
+    supplier VARCHAR(100) COMMENT '供应商',
+    spec VARCHAR(100) COMMENT '规格型号',
+    unit VARCHAR(20) COMMENT '单位',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_code (code)
+) COMMENT='物料管理';
+
+-- 工作台表
+CREATE TABLE IF NOT EXISTS mes_workstation (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    code VARCHAR(50) NOT NULL COMMENT '工作台编码',
+    name VARCHAR(100) NOT NULL COMMENT '工作台名称',
+    function_id BIGINT COMMENT '绑定职能ID',
+    user_id BIGINT COMMENT '绑定用户ID',
+    current_material_code VARCHAR(50) COMMENT '当前物料编码',
+    last_material_code VARCHAR(50) COMMENT '上一个物料编码',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_code (code)
+) COMMENT='工作台管理';
+
+-- 流程定义表
+CREATE TABLE IF NOT EXISTS mes_process (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    code VARCHAR(50) NOT NULL COMMENT '流程编码',
+    name VARCHAR(100) NOT NULL COMMENT '流程名称',
+    description VARCHAR(255) COMMENT '描述',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_code (code)
+) COMMENT='流程定义';
+
+-- 流程节点表
+CREATE TABLE IF NOT EXISTS mes_process_node (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    process_id BIGINT NOT NULL COMMENT '流程ID',
+    node_name VARCHAR(100) NOT NULL COMMENT '节点名称',
+    function_id BIGINT COMMENT '绑定职能ID',
+    sequence INT DEFAULT 0 COMMENT '顺序',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) COMMENT='流程节点';
