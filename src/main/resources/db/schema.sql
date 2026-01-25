@@ -137,3 +137,15 @@ CREATE TABLE IF NOT EXISTS mes_print_template (
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     UNIQUE KEY uk_code (code)
 ) COMMENT='打印模板管理';
+
+-- 质检记录表
+CREATE TABLE IF NOT EXISTS mes_qc_record (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    sn_code VARCHAR(50) NOT NULL COMMENT 'SN码',
+    batch_no VARCHAR(50) COMMENT '批次号',
+    qc_inspector VARCHAR(50) COMMENT '质检员',
+    electrician VARCHAR(50) COMMENT '电工',
+    fitter VARCHAR(50) COMMENT '钳工',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '生产日期/创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) COMMENT='质检记录';
