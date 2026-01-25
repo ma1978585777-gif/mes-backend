@@ -13,7 +13,7 @@ import java.util.List;
 
 @Tag(name = "用户管理")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/mes/user")
 @RequiredArgsConstructor
 public class UserController {
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "流程管理")
 @RestController
-@RequestMapping("/process")
+@RequestMapping("/mes/process")
 @RequiredArgsConstructor
 public class ProcessController {
 

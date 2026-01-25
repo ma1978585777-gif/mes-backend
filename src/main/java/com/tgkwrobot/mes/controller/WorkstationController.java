@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "工作台管理")
 @RestController
-@RequestMapping("/workstation")
+@RequestMapping("/mes/workstation")
 @RequiredArgsConstructor
 public class WorkstationController {
 

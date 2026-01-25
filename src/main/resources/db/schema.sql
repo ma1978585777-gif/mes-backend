@@ -88,3 +88,52 @@ CREATE TABLE IF NOT EXISTS mes_process_node (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) COMMENT='流程节点';
+
+-- 供应商表
+CREATE TABLE IF NOT EXISTS mes_supplier (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    code VARCHAR(50) NOT NULL COMMENT '供应商编码',
+    name VARCHAR(100) NOT NULL COMMENT '供应商名称',
+    contact_person VARCHAR(50) COMMENT '联系人',
+    contact_phone VARCHAR(20) COMMENT '联系电话',
+    address VARCHAR(255) COMMENT '地址',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_code (code)
+) COMMENT='供应商管理';
+
+-- 供应商物料关联表
+CREATE TABLE IF NOT EXISTS mes_supplier_material (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    supplier_id BIGINT NOT NULL COMMENT '供应商ID',
+    material_id BIGINT NOT NULL COMMENT '物料ID',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    UNIQUE KEY uk_supplier_material (supplier_id, material_id)
+) COMMENT='供应商物料关联';
+
+-- 打印机表
+CREATE TABLE IF NOT EXISTS mes_printer (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    code VARCHAR(50) NOT NULL COMMENT '打印机编码',
+    name VARCHAR(100) NOT NULL COMMENT '打印机名称',
+    ip_address VARCHAR(50) NOT NULL COMMENT 'IP地址',
+    port INT DEFAULT 9100 COMMENT '端口号',
+    description VARCHAR(255) COMMENT '描述',
+    status INT DEFAULT 1 COMMENT '状态 1:启用 0:禁用',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_code (code)
+) COMMENT='打印机管理';
+
+-- 打印模板表
+CREATE TABLE IF NOT EXISTS mes_print_template (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    code VARCHAR(50) NOT NULL COMMENT '模板编码',
+    name VARCHAR(100) NOT NULL COMMENT '模板名称',
+    material_id BIGINT NOT NULL COMMENT '关联物料ID',
+    config_json TEXT COMMENT '模板配置(JSON)',
+    description VARCHAR(255) COMMENT '描述',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_code (code)
+) COMMENT='打印模板管理';

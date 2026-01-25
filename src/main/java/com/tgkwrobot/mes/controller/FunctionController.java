@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "职能管理")
 @RestController
-@RequestMapping("/function")
+@RequestMapping("/mes/function")
 @RequiredArgsConstructor
 public class FunctionController {
 

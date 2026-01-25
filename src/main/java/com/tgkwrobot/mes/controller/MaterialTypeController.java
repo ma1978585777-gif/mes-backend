@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "物料类型管理")
 @RestController
-@RequestMapping("/materialType")
+@RequestMapping("/mes/materialType")
 @RequiredArgsConstructor
 public class MaterialTypeController {
 
