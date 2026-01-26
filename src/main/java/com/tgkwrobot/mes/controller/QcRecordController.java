@@ -19,8 +19,16 @@ public class QcRecordController {
 
     @Operation(summary = "新增记录")
     @PostMapping
-    public Result<Boolean> save(@RequestBody MesQcRecord qcRecord) {
-        return Result.success(qcRecordService.save(qcRecord));
+    public Result<MesQcRecord> save(@RequestBody MesQcRecord qcRecord) {
+        qcRecordService.save(qcRecord);
+        qcRecord = qcRecordService.getById(qcRecord.getId());
+        return Result.success(qcRecord);
+    }
+
+    @Operation(summary = "根据SN码更新状态为已质检")
+    @PostMapping("/updateStatusBySnCode")
+    public Result<Boolean> updateStatusBySnCode(@RequestParam String snCode) {
+        return Result.success(qcRecordService.updateStatusBySnCode(snCode));
     }
 
     @Operation(summary = "修改记录")
@@ -38,12 +46,18 @@ public class QcRecordController {
     @Operation(summary = "根据ID查询")
     @GetMapping("/{id}")
     public Result<MesQcRecord> get(@PathVariable Long id) {
-        return Result.success(qcRecordService.getById(id));
+        return Result.success(qcRecordService.getQcRecordDetail(id));
+    }
+
+    @Operation(summary = "根据SN码查询")
+    @GetMapping("/sn/{snCode}")
+    public Result<MesQcRecord> getBySnCode(@PathVariable String snCode) {
+        return Result.success(qcRecordService.getQcRecordBySnCode(snCode));
     }
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<Page<MesQcRecord>> page(Page<MesQcRecord> page) {
-        return Result.success(qcRecordService.page(page));
+        return Result.success((Page<MesQcRecord>) qcRecordService.getQcRecordPage(page));
     }
 }

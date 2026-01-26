@@ -1,6 +1,7 @@
 package com.tgkwrobot.mes.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,6 +32,16 @@ public class MesQcRecord {
 
     @Schema(description = "钳工")
     private String fitter;
+
+    @Schema(description = "物料ID")
+    private Long materialId;
+
+    @Schema(description = "质检状态 0:未质检 1:已质检")
+    private Integer status;
+
+    @TableField(exist = false)
+    @Schema(description = "物料名称")
+    private String materialName;
 
     @Schema(description = "生产日期/创建时间")
     private LocalDateTime createTime;

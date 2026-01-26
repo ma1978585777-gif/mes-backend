@@ -146,6 +146,8 @@ CREATE TABLE IF NOT EXISTS mes_qc_record (
     qc_inspector VARCHAR(50) COMMENT '质检员',
     electrician VARCHAR(50) COMMENT '电工',
     fitter VARCHAR(50) COMMENT '钳工',
+    material_id BIGINT COMMENT '物料ID',
+    status INT DEFAULT 0 COMMENT '质检状态 0:未质检 1:已质检',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '生产日期/创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) COMMENT='质检记录';
