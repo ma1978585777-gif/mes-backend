@@ -13,4 +13,11 @@ public interface IMesBoxDetailService extends IService<MesBoxDetail> {
      * @return 明细列表
      */
     List<MesBoxDetail> getDetailsByBoxCode(String boxCode);
+
+    /**
+     * 批量保存明细
+     * @param details 明细列表
+     * @return 是否成功
+     */
+    boolean saveBatchDetails(List<MesBoxDetail> details);
 }

@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -26,10 +26,10 @@ public class MesUser {
     private String name;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     @TableField(exist = false)
     @Schema(description = "用户绑定的职能ID列表")

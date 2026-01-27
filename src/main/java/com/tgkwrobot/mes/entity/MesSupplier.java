@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -34,12 +34,6 @@ public class MesSupplier {
     @Schema(description = "地址")
     private String address;
 
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
-    
     @TableField(exist = false)
     @Schema(description = "关联物料ID列表")
     private List<Long> materialIds;
@@ -47,4 +41,10 @@ public class MesSupplier {
     @TableField(exist = false)
     @Schema(description = "关联物料名称列表")
     private List<String> materialNames;
+
+    @Schema(description = "创建时间")
+    private Date createTime;
+
+    @Schema(description = "更新时间")
+    private Date updateTime;
 }

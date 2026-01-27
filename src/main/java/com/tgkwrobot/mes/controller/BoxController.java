@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tgkwrobot.mes.entity.MesBox;
 import com.tgkwrobot.mes.entity.MesBoxDetail;
 import com.tgkwrobot.mes.framework.web.Result;
+import com.tgkwrobot.mes.service.CodeRuleService;
 import com.tgkwrobot.mes.service.IMesBoxDetailService;
 import com.tgkwrobot.mes.service.IMesBoxService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,10 +22,12 @@ public class BoxController {
 
     private final IMesBoxService boxService;
     private final IMesBoxDetailService boxDetailService;
+    private final CodeRuleService codeRuleService;
 
     @Operation(summary = "创建箱信息")
     @PostMapping
     public Result<MesBox> createBox(@RequestBody MesBox box) {
+        box.setBoxCode(codeRuleService.generateSn());
         boxService.save(box);
         box = boxService.getById(box.getId());
         return Result.success(box);
@@ -52,6 +55,12 @@ public class BoxController {
     @PostMapping("/detail")
     public Result<Boolean> addDetail(@RequestBody MesBoxDetail detail) {
         return Result.success(boxDetailService.save(detail));
+    }
+
+    @Operation(summary = "批量添加箱明细")
+    @PostMapping("/detail/batch")
+    public Result<Boolean> addBatchDetails(@RequestBody List<MesBoxDetail> details) {
+        return Result.success(boxDetailService.saveBatchDetails(details));
     }
 
     @Operation(summary = "根据箱编码查询明细")

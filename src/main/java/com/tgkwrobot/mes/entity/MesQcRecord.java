@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @TableName("mes_qc_record")
@@ -36,9 +36,6 @@ public class MesQcRecord {
     @Schema(description = "物料ID")
     private Long materialId;
 
-    @Schema(description = "供应商id")
-    private String supplierId;
-
     @Schema(description = "质检状态 0:未质检 1:已质检")
     private Integer status;
 
@@ -47,8 +44,8 @@ public class MesQcRecord {
     private String materialName;
 
     @Schema(description = "生产日期/创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 }

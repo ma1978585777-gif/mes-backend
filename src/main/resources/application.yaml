@@ -1,6 +1,9 @@
 server:
   port: 8080
 spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
   profiles:
     active: ${PROFILE:dev}
 # SpringDoc & Knife4j 配置

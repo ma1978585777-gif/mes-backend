@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @TableName("mes_box_detail")
@@ -24,7 +24,7 @@ public class MesBoxDetail {
     private String boxCode;
 
     @Schema(description = "物料编码")
-    private String materialCode;
+    private Long materialId;
 
     @Schema(description = "物料名称")
     private String materialName;
@@ -36,8 +36,8 @@ public class MesBoxDetail {
     private String remark;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 }

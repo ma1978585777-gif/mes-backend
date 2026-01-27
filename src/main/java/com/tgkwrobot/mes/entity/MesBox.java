@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @TableName("mes_box")
@@ -34,7 +34,7 @@ public class MesBox {
     private String containerNo;
 
     @Schema(description = "包装时间")
-    private LocalDateTime packTime;
+    private Date packTime;
 
     @Schema(description = "复核人")
     private String reviewer;
@@ -55,8 +55,8 @@ public class MesBox {
     private String height;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 }
