@@ -2,7 +2,7 @@ server:
   port: 8080
 spring:
   profiles:
-    active: ${PROFILE:prod}
+    active: ${PROFILE:dev}
 # SpringDoc & Knife4j 配置
 springdoc:
   swagger-ui:

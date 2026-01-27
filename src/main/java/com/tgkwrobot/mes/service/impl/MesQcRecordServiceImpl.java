@@ -63,6 +63,15 @@ public class MesQcRecordServiceImpl extends ServiceImpl<MesQcRecordMapper, MesQc
         return record;
     }
 
+    @Override
+    public MesMaterial getMaterialBySnCode(String snCode) {
+        MesQcRecord record = this.getOne(new LambdaQueryWrapper<MesQcRecord>().eq(MesQcRecord::getSnCode, snCode));
+        if (record == null || record.getMaterialId() == null) {
+            return null;
+        }
+        return materialService.getById(record.getMaterialId());
+    }
+
     private void populateMaterialName(List<MesQcRecord> records) {
         if (records == null || records.isEmpty()) {
             return;

@@ -1,6 +1,7 @@
 package com.tgkwrobot.mes.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tgkwrobot.mes.entity.MesMaterial;
 import com.tgkwrobot.mes.entity.MesQcRecord;
 import com.tgkwrobot.mes.framework.web.Result;
 import com.tgkwrobot.mes.service.IMesQcRecordService;
@@ -53,6 +54,12 @@ public class QcRecordController {
     @GetMapping("/sn/{snCode}")
     public Result<MesQcRecord> getBySnCode(@PathVariable String snCode) {
         return Result.success(qcRecordService.getQcRecordBySnCode(snCode));
+    }
+
+    @Operation(summary = "根据SN码查询物料信息")
+    @GetMapping("/sn/{snCode}/material")
+    public Result<MesMaterial> getMaterialBySnCode(@PathVariable String snCode) {
+        return Result.success(qcRecordService.getMaterialBySnCode(snCode));
     }
 
     @Operation(summary = "分页查询")

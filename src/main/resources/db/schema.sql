@@ -151,3 +151,36 @@ CREATE TABLE IF NOT EXISTS mes_qc_record (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '生产日期/创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) COMMENT='质检记录';
+
+-- 箱信息表
+CREATE TABLE IF NOT EXISTS mes_box (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    box_code VARCHAR(50) NOT NULL COMMENT '箱编码',
+    project_no VARCHAR(50) COMMENT '项目号',
+    device_no VARCHAR(50) COMMENT '设备号',
+    pallet_no VARCHAR(50) COMMENT '箱拖号',
+    container_no VARCHAR(50) COMMENT '集装箱号',
+    pack_time DATETIME COMMENT '包装时间',
+    reviewer VARCHAR(50) COMMENT '复核人',
+    net_weight DECIMAL(10, 2) COMMENT '整托净重',
+    gross_weight DECIMAL(10, 2) COMMENT '整托毛重',
+    length VARCHAR(20) COMMENT '长',
+    width VARCHAR(20) COMMENT '宽',
+    height VARCHAR(20) COMMENT '高',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_box_code (box_code)
+) COMMENT='箱信息管理';
+
+-- 箱明细表
+CREATE TABLE IF NOT EXISTS mes_box_detail (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    box_id BIGINT NOT NULL COMMENT '箱ID',
+    box_code VARCHAR(50) NOT NULL COMMENT '箱编码',
+    material_code VARCHAR(50) NOT NULL COMMENT '物料编码',
+    material_name VARCHAR(100) COMMENT '物料名称',
+    quantity INT DEFAULT 0 COMMENT '数量',
+    remark VARCHAR(255) COMMENT '备注',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) COMMENT='箱明细管理';

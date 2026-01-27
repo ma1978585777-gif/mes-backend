@@ -2,6 +2,7 @@ package com.tgkwrobot.mes.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tgkwrobot.mes.entity.MesMaterial;
 import com.tgkwrobot.mes.entity.MesQcRecord;
 
 public interface IMesQcRecordService extends IService<MesQcRecord> {
@@ -33,4 +34,11 @@ public interface IMesQcRecordService extends IService<MesQcRecord> {
      * @return 质检记录详情
      */
     MesQcRecord getQcRecordBySnCode(String snCode);
+
+    /**
+     * 根据SN码查询关联的物料信息
+     * @param snCode SN码
+     * @return 物料信息
+     */
+    MesMaterial getMaterialBySnCode(String snCode);
 }
