@@ -2,6 +2,7 @@ package com.tgkwrobot.mes.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tgkwrobot.mes.entity.MesUser;
+import com.tgkwrobot.mes.framework.web.PageRequest;
 import com.tgkwrobot.mes.framework.web.Result;
 import com.tgkwrobot.mes.service.IMesUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,8 +58,9 @@ public class UserController {
     }
 
     @Operation(summary = "分页查询")
-    @GetMapping("/page")
-    public Result<Page<MesUser>> page(Page<MesUser> page) {
-        return Result.success((Page<MesUser>) userService.getUserPage(page));
+    @PostMapping("/page")
+    public Result<Page<MesUser>> page(@RequestBody PageRequest<MesUser> pageRequest) {
+        Page<MesUser> page = new Page<>(pageRequest.getPage(), pageRequest.getSize());
+        return Result.success((Page<MesUser>) userService.getUserPage(page, pageRequest.getParams()));
     }
 }

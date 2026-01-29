@@ -2,6 +2,7 @@ package com.tgkwrobot.mes.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tgkwrobot.mes.entity.MesPrintTemplate;
+import com.tgkwrobot.mes.framework.web.PageRequest;
 import com.tgkwrobot.mes.framework.web.Result;
 import com.tgkwrobot.mes.service.IMesPrintTemplateService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,8 +43,9 @@ public class PrintTemplateController {
     }
 
     @Operation(summary = "分页查询")
-    @GetMapping("/page")
-    public Result<Page<MesPrintTemplate>> page(Page<MesPrintTemplate> page) {
-        return Result.success((Page<MesPrintTemplate>) printTemplateService.getTemplatePage(page));
+    @PostMapping("/page")
+    public Result<Page<MesPrintTemplate>> page(@RequestBody PageRequest<MesPrintTemplate> pageRequest) {
+        Page<MesPrintTemplate> page = new Page<>(pageRequest.getPage(), pageRequest.getSize());
+        return Result.success((Page<MesPrintTemplate>) printTemplateService.getTemplatePage(page, pageRequest.getParams()));
     }
 }

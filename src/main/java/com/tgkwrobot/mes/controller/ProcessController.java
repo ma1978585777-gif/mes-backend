@@ -2,12 +2,16 @@ package com.tgkwrobot.mes.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tgkwrobot.mes.entity.MesProcess;
+import com.tgkwrobot.mes.framework.web.PageRequest;
 import com.tgkwrobot.mes.framework.web.Result;
 import com.tgkwrobot.mes.service.IMesProcessService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.util.StringUtils;
 
 @Tag(name = "流程管理")
 @RestController
@@ -42,8 +46,13 @@ public class ProcessController {
     }
 
     @Operation(summary = "分页查询")
-    @GetMapping("/page")
-    public Result<Page<MesProcess>> page(Page<MesProcess> page) {
-        return Result.success(processService.page(page));
+    @PostMapping("/page")
+    public Result<Page<MesProcess>> page(@RequestBody PageRequest<MesProcess> pageRequest) {
+        Page<MesProcess> page = new Page<>(pageRequest.getPage(), pageRequest.getSize());
+        MesProcess process = pageRequest.getParams();
+        return Result.success(processService.page(page, new LambdaQueryWrapper<MesProcess>()
+                .like(process != null && StringUtils.hasText(process.getName()), MesProcess::getName, process != null ? process.getName() : null)
+                .like(process != null && StringUtils.hasText(process.getCode()), MesProcess::getCode, process != null ? process.getCode() : null)
+        ));
     }
 }

@@ -2,12 +2,16 @@ package com.tgkwrobot.mes.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tgkwrobot.mes.entity.MesMaterialType;
+import com.tgkwrobot.mes.framework.web.PageRequest;
 import com.tgkwrobot.mes.framework.web.Result;
 import com.tgkwrobot.mes.service.IMesMaterialTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.util.StringUtils;
 
 @Tag(name = "物料类型管理")
 @RestController
@@ -42,8 +46,13 @@ public class MaterialTypeController {
     }
 
     @Operation(summary = "分页查询")
-    @GetMapping("/page")
-    public Result<Page<MesMaterialType>> page(Page<MesMaterialType> page) {
-        return Result.success(materialTypeService.page(page));
+    @PostMapping("/page")
+    public Result<Page<MesMaterialType>> page(@RequestBody PageRequest<MesMaterialType> pageRequest) {
+        Page<MesMaterialType> page = new Page<>(pageRequest.getPage(), pageRequest.getSize());
+        MesMaterialType materialType = pageRequest.getParams();
+        return Result.success(materialTypeService.page(page, new LambdaQueryWrapper<MesMaterialType>()
+                .like(materialType != null && StringUtils.hasText(materialType.getName()), MesMaterialType::getName, materialType != null ? materialType.getName() : null)
+                .like(materialType != null && StringUtils.hasText(materialType.getCode()), MesMaterialType::getCode, materialType != null ? materialType.getCode() : null)
+        ));
     }
 }

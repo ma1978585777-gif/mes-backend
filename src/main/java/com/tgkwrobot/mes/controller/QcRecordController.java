@@ -3,6 +3,7 @@ package com.tgkwrobot.mes.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tgkwrobot.mes.entity.MesMaterial;
 import com.tgkwrobot.mes.entity.MesQcRecord;
+import com.tgkwrobot.mes.framework.web.PageRequest;
 import com.tgkwrobot.mes.framework.web.Result;
 import com.tgkwrobot.mes.service.IMesQcRecordService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,8 +64,9 @@ public class QcRecordController {
     }
 
     @Operation(summary = "分页查询")
-    @GetMapping("/page")
-    public Result<Page<MesQcRecord>> page(Page<MesQcRecord> page) {
-        return Result.success((Page<MesQcRecord>) qcRecordService.getQcRecordPage(page));
+    @PostMapping("/page")
+    public Result<Page<MesQcRecord>> page(@RequestBody PageRequest<MesQcRecord> pageRequest) {
+        Page<MesQcRecord> page = new Page<>(pageRequest.getPage(), pageRequest.getSize());
+        return Result.success((Page<MesQcRecord>) qcRecordService.getQcRecordPage(page, pageRequest.getParams()));
     }
 }

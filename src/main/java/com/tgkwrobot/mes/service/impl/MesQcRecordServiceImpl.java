@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.util.StringUtils;
+
 @Service
 @RequiredArgsConstructor
 public class MesQcRecordServiceImpl extends ServiceImpl<MesQcRecordMapper, MesQcRecord> implements IMesQcRecordService {
@@ -24,11 +26,18 @@ public class MesQcRecordServiceImpl extends ServiceImpl<MesQcRecordMapper, MesQc
     private final IMesMaterialService materialService;
 
     @Override
-    public IPage<MesQcRecord> getQcRecordPage(IPage<MesQcRecord> page) {
-        IPage<MesQcRecord> result = this.page(page);
+    public IPage<MesQcRecord> getQcRecordPage(IPage<MesQcRecord> page, MesQcRecord queryParams) {
+        LambdaQueryWrapper<MesQcRecord> wrapper = new LambdaQueryWrapper<>();
+        if (queryParams != null) {
+            wrapper.like(StringUtils.hasText(queryParams.getSnCode()), MesQcRecord::getSnCode, queryParams.getSnCode())
+                   .like(StringUtils.hasText(queryParams.getBatchNo()), MesQcRecord::getBatchNo, queryParams.getBatchNo())
+                   .eq(queryParams.getStatus() != null, MesQcRecord::getStatus, queryParams.getStatus());
+        }
+        IPage<MesQcRecord> result = this.page(page, wrapper);
         populateMaterialName(result.getRecords());
         return result;
     }
+
 
     @Override
     public MesQcRecord getQcRecordDetail(Long id) {

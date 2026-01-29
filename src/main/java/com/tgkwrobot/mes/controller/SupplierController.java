@@ -2,6 +2,7 @@ package com.tgkwrobot.mes.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tgkwrobot.mes.entity.MesSupplier;
+import com.tgkwrobot.mes.framework.web.PageRequest;
 import com.tgkwrobot.mes.framework.web.Result;
 import com.tgkwrobot.mes.service.IMesSupplierService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,8 +52,9 @@ public class SupplierController {
     }
 
     @Operation(summary = "分页查询")
-    @GetMapping("/page")
-    public Result<Page<MesSupplier>> page(Page<MesSupplier> page) {
-        return Result.success((Page<MesSupplier>) supplierService.getSupplierPage(page));
+    @PostMapping("/page")
+    public Result<Page<MesSupplier>> page(@RequestBody PageRequest<MesSupplier> pageRequest) {
+        Page<MesSupplier> page = new Page<>(pageRequest.getPage(), pageRequest.getSize());
+        return Result.success((Page<MesSupplier>) supplierService.getSupplierPage(page, pageRequest.getParams()));
     }
 }

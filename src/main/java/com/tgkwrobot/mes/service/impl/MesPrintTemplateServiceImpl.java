@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.util.StringUtils;
+
 @Service
 @RequiredArgsConstructor
 public class MesPrintTemplateServiceImpl extends ServiceImpl<MesPrintTemplateMapper, MesPrintTemplate> implements IMesPrintTemplateService {
@@ -22,11 +25,17 @@ public class MesPrintTemplateServiceImpl extends ServiceImpl<MesPrintTemplateMap
     private final IMesMaterialService materialService;
 
     @Override
-    public IPage<MesPrintTemplate> getTemplatePage(IPage<MesPrintTemplate> page) {
-        IPage<MesPrintTemplate> result = this.page(page);
+    public IPage<MesPrintTemplate> getTemplatePage(IPage<MesPrintTemplate> page, MesPrintTemplate queryParams) {
+        LambdaQueryWrapper<MesPrintTemplate> wrapper = new LambdaQueryWrapper<>();
+        if (queryParams != null) {
+            wrapper.like(StringUtils.hasText(queryParams.getName()), MesPrintTemplate::getName, queryParams.getName())
+                   .like(StringUtils.hasText(queryParams.getCode()), MesPrintTemplate::getCode, queryParams.getCode());
+        }
+        IPage<MesPrintTemplate> result = this.page(page, wrapper);
         populateMaterialNames(result.getRecords());
         return result;
     }
+
 
     @Override
     public MesPrintTemplate getTemplateDetail(Long id) {

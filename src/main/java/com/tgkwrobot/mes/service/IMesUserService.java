@@ -46,7 +46,8 @@ public interface IMesUserService extends IService<MesUser> {
     /**
      * 分页查询用户（包含职能）
      * @param page 分页参数
+     * @param queryParams 查询参数
      * @return 用户分页数据
      */
-    IPage<MesUser> getUserPage(IPage<MesUser> page);
+    IPage<MesUser> getUserPage(IPage<MesUser> page, MesUser queryParams);
 }

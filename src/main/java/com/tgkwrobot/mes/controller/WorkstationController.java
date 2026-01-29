@@ -2,12 +2,16 @@ package com.tgkwrobot.mes.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tgkwrobot.mes.entity.MesWorkstation;
+import com.tgkwrobot.mes.framework.web.PageRequest;
 import com.tgkwrobot.mes.framework.web.Result;
 import com.tgkwrobot.mes.service.IMesWorkstationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.util.StringUtils;
 
 @Tag(name = "工作台管理")
 @RestController
@@ -63,8 +67,13 @@ public class WorkstationController {
     }
 
     @Operation(summary = "分页查询")
-    @GetMapping("/page")
-    public Result<Page<MesWorkstation>> page(Page<MesWorkstation> page) {
-        return Result.success(workstationService.page(page));
+    @PostMapping("/page")
+    public Result<Page<MesWorkstation>> page(@RequestBody PageRequest<MesWorkstation> pageRequest) {
+        Page<MesWorkstation> page = new Page<>(pageRequest.getPage(), pageRequest.getSize());
+        MesWorkstation workstation = pageRequest.getParams();
+        return Result.success(workstationService.page(page, new LambdaQueryWrapper<MesWorkstation>()
+                .like(workstation != null && StringUtils.hasText(workstation.getName()), MesWorkstation::getName, workstation != null ? workstation.getName() : null)
+                .like(workstation != null && StringUtils.hasText(workstation.getCode()), MesWorkstation::getCode, workstation != null ? workstation.getCode() : null)
+        ));
     }
 }

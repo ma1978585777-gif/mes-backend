@@ -10,9 +10,10 @@ public interface IMesQcRecordService extends IService<MesQcRecord> {
     /**
      * 分页查询质检记录（包含物料名称）
      * @param page 分页参数
+     * @param queryParams 查询参数
      * @return 质检记录分页数据
      */
-    IPage<MesQcRecord> getQcRecordPage(IPage<MesQcRecord> page);
+    IPage<MesQcRecord> getQcRecordPage(IPage<MesQcRecord> page, MesQcRecord queryParams);
 
     /**
      * 获取质检记录详情（包含物料名称）

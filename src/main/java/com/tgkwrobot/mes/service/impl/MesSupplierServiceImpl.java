@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.util.StringUtils;
+
 @Service
 @RequiredArgsConstructor
 public class MesSupplierServiceImpl extends ServiceImpl<MesSupplierMapper, MesSupplier> implements IMesSupplierService {
@@ -27,11 +29,17 @@ public class MesSupplierServiceImpl extends ServiceImpl<MesSupplierMapper, MesSu
     private final IMesMaterialService materialService;
 
     @Override
-    public IPage<MesSupplier> getSupplierPage(IPage<MesSupplier> page) {
-        IPage<MesSupplier> result = this.page(page);
+    public IPage<MesSupplier> getSupplierPage(IPage<MesSupplier> page, MesSupplier queryParams) {
+        LambdaQueryWrapper<MesSupplier> wrapper = new LambdaQueryWrapper<>();
+        if (queryParams != null) {
+            wrapper.like(StringUtils.hasText(queryParams.getName()), MesSupplier::getName, queryParams.getName())
+                   .like(StringUtils.hasText(queryParams.getCode()), MesSupplier::getCode, queryParams.getCode());
+        }
+        IPage<MesSupplier> result = this.page(page, wrapper);
         populateMaterials(result.getRecords());
         return result;
     }
+
 
     @Override
     public MesSupplier getSupplierDetail(Long id) {

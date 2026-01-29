@@ -2,12 +2,16 @@ package com.tgkwrobot.mes.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tgkwrobot.mes.entity.MesPrinter;
+import com.tgkwrobot.mes.framework.web.PageRequest;
 import com.tgkwrobot.mes.framework.web.Result;
 import com.tgkwrobot.mes.service.IMesPrinterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.util.StringUtils;
 
 @Tag(name = "打印机管理")
 @RestController
@@ -42,8 +46,14 @@ public class PrinterController {
     }
 
     @Operation(summary = "分页查询")
-    @GetMapping("/page")
-    public Result<Page<MesPrinter>> page(Page<MesPrinter> page) {
-        return Result.success(printerService.page(page));
+    @PostMapping("/page")
+    public Result<Page<MesPrinter>> page(@RequestBody PageRequest<MesPrinter> pageRequest) {
+        Page<MesPrinter> page = new Page<>(pageRequest.getPage(), pageRequest.getSize());
+        MesPrinter printer = pageRequest.getParams();
+        return Result.success(printerService.page(page, new LambdaQueryWrapper<MesPrinter>()
+                .like(printer != null && StringUtils.hasText(printer.getName()), MesPrinter::getName, printer != null ? printer.getName() : null)
+                .like(printer != null && StringUtils.hasText(printer.getCode()), MesPrinter::getCode, printer != null ? printer.getCode() : null)
+                .eq(printer != null && printer.getStatus() != null, MesPrinter::getStatus, printer != null ? printer.getStatus() : null)
+        ));
     }
 }

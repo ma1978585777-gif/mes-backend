@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.util.StringUtils;
+
 @Service
 @RequiredArgsConstructor
 public class MesUserServiceImpl extends ServiceImpl<MesUserMapper, MesUser> implements IMesUserService {
@@ -88,11 +90,17 @@ public class MesUserServiceImpl extends ServiceImpl<MesUserMapper, MesUser> impl
     }
 
     @Override
-    public IPage<MesUser> getUserPage(IPage<MesUser> page) {
-        IPage<MesUser> result = this.page(page);
+    public IPage<MesUser> getUserPage(IPage<MesUser> page, MesUser queryParams) {
+        LambdaQueryWrapper<MesUser> wrapper = new LambdaQueryWrapper<>();
+        if (queryParams != null) {
+            wrapper.like(StringUtils.hasText(queryParams.getName()), MesUser::getName, queryParams.getName())
+                   .like(StringUtils.hasText(queryParams.getEmpId()), MesUser::getEmpId, queryParams.getEmpId());
+        }
+        IPage<MesUser> result = this.page(page, wrapper);
         populateUserFunctions(result.getRecords());
         return result;
     }
+
 
     /**
      * 批量填充用户职能信息

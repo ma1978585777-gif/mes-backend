@@ -147,6 +147,7 @@ CREATE TABLE IF NOT EXISTS mes_qc_record (
     electrician VARCHAR(50) COMMENT '电工',
     fitter VARCHAR(50) COMMENT '钳工',
     material_id BIGINT COMMENT '物料ID',
+    quantity INT DEFAULT 1 COMMENT '数量',
     status INT DEFAULT 0 COMMENT '质检状态 0:未质检 1:已质检',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '生产日期/创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
@@ -184,3 +185,44 @@ CREATE TABLE IF NOT EXISTS mes_box_detail (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) COMMENT='箱明细管理';
+
+-- 仓库表
+CREATE TABLE IF NOT EXISTS mes_warehouse (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    warehouse_code VARCHAR(50) NOT NULL COMMENT '仓库编码',
+    warehouse_name VARCHAR(100) NOT NULL COMMENT '仓库名称',
+    location VARCHAR(255) COMMENT '位置',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_warehouse_code (warehouse_code)
+) COMMENT='仓库管理';
+
+-- 物料库存表
+CREATE TABLE IF NOT EXISTS mes_material_stock (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    material_id BIGINT NOT NULL COMMENT '物料ID',
+    material_code VARCHAR(50) NOT NULL COMMENT '物料编码',
+    material_name VARCHAR(100) COMMENT '物料名称',
+    warehouse_id BIGINT NOT NULL COMMENT '仓库ID',
+    quantity DECIMAL(10, 2) DEFAULT 0 COMMENT '库存数量',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    UNIQUE KEY uk_material_warehouse (material_id, warehouse_id)
+) COMMENT='物料库存管理';
+
+-- 出入库记录表
+CREATE TABLE IF NOT EXISTS mes_stock_record (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    record_no VARCHAR(50) NOT NULL COMMENT '记录单号',
+    type INT NOT NULL COMMENT '类型 1:入库 2:出库',
+    material_id BIGINT NOT NULL COMMENT '物料ID',
+    material_code VARCHAR(50) NOT NULL COMMENT '物料编码',
+    material_name VARCHAR(100) COMMENT '物料名称',
+    warehouse_id BIGINT NOT NULL COMMENT '仓库ID',
+    quantity DECIMAL(10, 2) NOT NULL COMMENT '数量',
+    batch_no VARCHAR(50) COMMENT '批次号',
+    operator VARCHAR(50) COMMENT '操作人',
+    remark VARCHAR(255) COMMENT '备注',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    UNIQUE KEY uk_record_no (record_no)
+) COMMENT='出入库记录';

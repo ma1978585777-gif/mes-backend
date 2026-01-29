@@ -11,9 +11,11 @@ public interface IMesSupplierService extends IService<MesSupplier> {
     /**
      * 分页查询供应商（包含关联物料信息）
      * @param page 分页参数
+     * @param queryParams 查询参数
      * @return 供应商分页数据
      */
-    IPage<MesSupplier> getSupplierPage(IPage<MesSupplier> page);
+    IPage<MesSupplier> getSupplierPage(IPage<MesSupplier> page, MesSupplier queryParams);
+
 
     /**
      * 获取供应商详情（包含关联物料信息）

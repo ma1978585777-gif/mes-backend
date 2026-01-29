@@ -9,10 +9,17 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import java.util.List;
+
 @Data
 @TableName("mes_box")
 @Schema(description = "箱信息实体")
 public class MesBox {
+
+    @TableField(exist = false)
+    @Schema(description = "箱明细列表")
+    private List<MesBoxDetail> details;
 
     @TableId(type = IdType.AUTO)
     @Schema(description = "主键ID")
