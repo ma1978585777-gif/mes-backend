@@ -36,6 +36,9 @@ public class MesQcRecord {
     @Schema(description = "物料ID")
     private Long materialId;
 
+    @Schema(description = "数量")
+    private Integer quantity;
+
     @Schema(description = "质检状态 0:未质检 1:已质检")
     private Integer status;
 
