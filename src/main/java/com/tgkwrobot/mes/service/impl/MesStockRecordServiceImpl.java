@@ -15,11 +15,15 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.tgkwrobot.mes.entity.MesWarehouse;
+import com.tgkwrobot.mes.service.IMesWarehouseService;
+
 @Service
 @RequiredArgsConstructor
 public class MesStockRecordServiceImpl extends ServiceImpl<MesStockRecordMapper, MesStockRecord> implements IMesStockRecordService {
 
     private final IMesMaterialStockService materialStockService;
+    private final IMesWarehouseService warehouseService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -27,6 +31,14 @@ public class MesStockRecordServiceImpl extends ServiceImpl<MesStockRecordMapper,
         // 1. 生成单号 (如果未提供)
         if (!StringUtils.hasText(stockRecord.getRecordNo())) {
             stockRecord.setRecordNo("REC" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + (int)(Math.random() * 9000 + 1000));
+        }
+
+        // 填充仓库名称
+        if (stockRecord.getWarehouseId() != null && !StringUtils.hasText(stockRecord.getWarehouseName())) {
+            MesWarehouse warehouse = warehouseService.getById(stockRecord.getWarehouseId());
+            if (warehouse != null) {
+                stockRecord.setWarehouseName(warehouse.getWarehouseName());
+            }
         }
 
         // 2. 保存记录
@@ -49,6 +61,7 @@ public class MesStockRecordServiceImpl extends ServiceImpl<MesStockRecordMapper,
                 stock.setMaterialCode(stockRecord.getMaterialCode());
                 stock.setMaterialName(stockRecord.getMaterialName());
                 stock.setWarehouseId(stockRecord.getWarehouseId());
+                stock.setWarehouseName(stockRecord.getWarehouseName()); // 设置仓库名称
                 stock.setQuantity(stockRecord.getQuantity());
                 materialStockService.save(stock);
             } else {
@@ -65,6 +78,10 @@ public class MesStockRecordServiceImpl extends ServiceImpl<MesStockRecordMapper,
                     throw new RuntimeException("库存不足，无法出库");
                 }
                 stock.setQuantity(currentQty.subtract(stockRecord.getQuantity()));
+            }
+            // 确保仓库名称同步更新（防止仓库改名）
+            if (StringUtils.hasText(stockRecord.getWarehouseName())) {
+                stock.setWarehouseName(stockRecord.getWarehouseName());
             }
             materialStockService.updateById(stock);
         }

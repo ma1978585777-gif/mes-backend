@@ -36,6 +36,9 @@ public class MesStockRecord {
     @Schema(description = "仓库ID")
     private Long warehouseId;
 
+    @Schema(description = "仓库名称")
+    private String warehouseName;
+
     @Schema(description = "数量")
     private BigDecimal quantity;
 

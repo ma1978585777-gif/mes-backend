@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Tag(name = "仓库管理")
 @RestController
@@ -57,9 +58,16 @@ public class WarehouseController {
     public Result<Page<MesWarehouse>> page(@RequestBody PageRequest<MesWarehouse> pageRequest) {
         Page<MesWarehouse> page = new Page<>(pageRequest.getPage(), pageRequest.getSize());
         MesWarehouse params = pageRequest.getParams();
+
         return Result.success(warehouseService.page(page, new LambdaQueryWrapper<MesWarehouse>()
-                .like(params != null && StringUtils.hasText(params.getWarehouseCode()), MesWarehouse::getWarehouseCode, params.getWarehouseCode())
-                .like(StringUtils.hasText(params.getWarehouseName()), MesWarehouse::getWarehouseName, params.getWarehouseName())
+                // 使用 Optional 安全提取值，避免在 params 为 null 时调用其 getter 方法
+                .like(params != null && StringUtils.hasText(params.getWarehouseCode()),
+                        MesWarehouse::getWarehouseCode,
+                        Optional.ofNullable(params).map(MesWarehouse::getWarehouseCode).orElse(null))
+
+                .like(params != null && StringUtils.hasText(params.getWarehouseName()),
+                        MesWarehouse::getWarehouseName,
+                        Optional.ofNullable(params).map(MesWarehouse::getWarehouseName).orElse(null))
         ));
     }
 }
